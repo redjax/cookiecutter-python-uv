@@ -13,6 +13,7 @@ dependencies = []
 
 [tool.uv]
 dev-dependencies = ["nox", "ruff", "pytest-xdist"]
+sources = { {{ cookiecutter.project_name }} = { path = "./src/{{ cookiecutter.project_name }}" } }
 
 [tool.ruff]
 target-version = "py311"
