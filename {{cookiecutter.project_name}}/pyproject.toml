@@ -13,7 +13,6 @@ dependencies = []
 
 [tool.uv]
 dev-dependencies = ["nox", "ruff", "pytest-xdist"]
-package-dir = { "" = "src" }
 
 [tool.ruff]
 target-version = "py311"
