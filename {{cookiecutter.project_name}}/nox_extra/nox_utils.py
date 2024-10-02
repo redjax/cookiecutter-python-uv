@@ -54,9 +54,6 @@ PY_VER_TUPLE: tuple[str, str, str] = platform.python_version_tuple()
 ## Dynamically set Python version
 DEFAULT_PYTHON: str = f"{PY_VER_TUPLE[0]}.{PY_VER_TUPLE[1]}"
 
-## PDM version for sessions that use it
-PDM_VER: str = "{{ cookiecutter.pdm_version }}"
-
 ## At minimum, these paths will be checked by your linters
 #  Add new paths with nox_utils.append_lint_paths(extra_paths=["..."],)
 DEFAULT_LINT_PATHS: list[str] = ["src", "tests"]
@@ -326,42 +323,3 @@ def export_requirements(session: nox.Session, requirements_output_dir: Path):
     )
 
 
-@nox.session(python=[DEFAULT_PYTHON], name="pdm-export")
-@nox.parametrize("pdm_ver", [PDM_VER])
-@nox.parametrize("requirements_output_dir", REQUIREMENTS_OUTPUT_DIR)
-def export_requirements(
-    session: nox.Session, pdm_ver: str, requirements_output_dir: Path
-):
-    ## Ensure REQUIREMENTS_OUTPUT_DIR path exists
-    if not requirements_output_dir.exists():
-        try:
-            requirements_output_dir.mkdir(parents=True, exist_ok=True)
-        except Exception as exc:
-            msg = Exception(
-                f"Unable to create requirements export directory: '{requirements_output_dir}'. Details: {exc}"
-            )
-            log.error(msg)
-
-            requirements_output_dir: Path = Path("./")
-
-    session.install(f"pdm>={pdm_ver}")
-
-    log.info("Exporting production requirements")
-    session.run(
-        "pdm",
-        "export",
-        "--prod",
-        "-o",
-        f"{REQUIREMENTS_OUTPUT_DIR}/requirements.txt",
-        "--without-hashes",
-    )
-
-    log.info("Exporting development requirements")
-    session.run(
-        "pdm",
-        "export",
-        "-d",
-        "-o",
-        f"{REQUIREMENTS_OUTPUT_DIR}/requirements.dev.txt",
-        "--without-hashes",
-    )

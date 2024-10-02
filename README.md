@@ -2,22 +2,16 @@
 
 A Python cookiecutter template using [uv](https://docs.astral.sh/uv/) for dependency & project management.
 
-** NOTE **
-
-I am converting this repository from my [Python + PDM cookiecutter repo](https://github.com/redjax/cookiecutter-python-pdm). This message will remain up until conversion is complete.
-
----
-
 ## Usage
 
 ### With cookiecutter cli
 
 #### + From a location on the file system
 
-(Example:  `c:\git\cookiecutter-templates\cookiecutter-python-pdm`):
+(Example:  `c:\git\cookiecutter-templates\cookiecutter-python-uv`):
 
 ```shell
-cookiecutter c:\git\cookiecutter-templates\cookiecutter-python-pdm --output-dir=some/path/to/project
+cookiecutter c:\git\cookiecutter-templates\cookiecutter-python-uv --output-dir=some/path/to/project
 ```
 
 #### + Skip cookiecutter creation prompts
@@ -25,16 +19,16 @@ cookiecutter c:\git\cookiecutter-templates\cookiecutter-python-pdm --output-dir=
 Skip prompts & render template using defaults defined in [`cookiecutter.json`](./cookiecutter.json):
 
 ```shell
-cookiecutter c:\git\cookiecutter-templates\cookiecutter-python-pdm --no-input
+cookiecutter c:\git\cookiecutter-templates\cookiecutter-python-uv --no-input
 ```
 
 #### + Install from a git(hub) repository
 
 ```shell
-cookiecutter gh:<user>/cookiecutter-python-pdm
+cookiecutter gh:<user>/cookiecutter-python-uv
 
 ## OR
-cookiecutter https://github.com/<user>/cookiecutter-python-pdm
+cookiecutter https://github.com/<user>/cookiecutter-python-uv
 ```
 
 ### With nox
