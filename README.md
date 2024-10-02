@@ -1,6 +1,12 @@
-# Python + PDM Cookiecutter
+# Python + UV Cookiecutter
 
-A Python cookiecutter template using [pdm](https://pdm-project.org) for dependency & project management.
+A Python cookiecutter template using [uv](https://docs.astral.sh/uv/) for dependency & project management.
+
+** NOTE **
+
+I am converting this repository from my [Python + PDM cookiecutter repo](https://github.com/redjax/cookiecutter-python-pdm). This message will remain up until conversion is complete.
+
+---
 
 ## Usage
 
