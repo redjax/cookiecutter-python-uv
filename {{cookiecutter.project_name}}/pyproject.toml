@@ -9,7 +9,27 @@ readme = "README.md"
 license = { text = "MIT" }
 requires-python = "{{ cookiecutter.python_version }}"
 
-dependencies = []
+dependencies = [
+    {% if cookiecutter.add_dynaconf %}
+    "dynaconf",
+    {% endif %}
+    {% if cookiecutter.add_pydantic %}
+    "pydantic",
+    {% endif %}
+    {% if cookiecutter.add_http %}
+    "httpx",
+    "hishel",
+    {% endif %}
+    {% if cookiecutter.add_pandas %}
+    "pandas",
+    "pyarrow",
+    {% endif %}
+    {% if cookiecutter.add_sqlalchemy %}
+    "add_sqlalchemy",
+    {% endif %}
+    {% if cookiecutter.add_pendulum %}
+    {% endif %}
+]
 
 [tool.uv]
 sources = { {{ cookiecutter.project_name }} = { path = "./src/{{ cookiecutter.package_name }}" } }
