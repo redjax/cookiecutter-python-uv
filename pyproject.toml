@@ -10,5 +10,9 @@ license = { text = "MIT" }
 
 [tool.uv]
 dev-dependencies = [
-    "nox>=2024.4.15", "uv>=0.4.18", "cookiecutter>=2.6.0"
+    "nox>=2024.4.15",
+    "uv>=0.4.18",
+    "cookiecutter>=2.6.0",
+    "ruff>=0.6.8",
+    "pytest-xdist>=3.6.1",
 ]

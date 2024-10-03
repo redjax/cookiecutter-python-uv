@@ -12,8 +12,14 @@ requires-python = "{{ cookiecutter.python_version }}"
 dependencies = []
 
 [tool.uv]
-dev-dependencies = ["nox", "ruff", "pytest-xdist"]
-sources = { {{ cookiecutter.project_name }} = { path = "./src/{{ cookiecutter.project_name }}" } }
+sources = { {{ cookiecutter.project_name }} = { path = "./src/{{ cookiecutter.package_name }}" } }
+
+dev-dependencies = [
+    "nox>=2024.4.15",
+    "uv>=0.4.18",
+    "ruff>=0.6.8",
+    "pytest-xdist>=3.6.1",
+]
 
 [tool.ruff]
 target-version = "py311"
