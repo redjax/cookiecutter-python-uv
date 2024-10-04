@@ -10,25 +10,13 @@ license = { text = "MIT" }
 requires-python = "{{ cookiecutter.python_version }}"
 
 dependencies = [
-    {% if cookiecutter.add_dynaconf %}
-    "dynaconf",
-    {% endif %}
-    {% if cookiecutter.add_pydantic %}
-    "pydantic",
-    {% endif %}
-    {% if cookiecutter.add_http %}
-    "httpx",
-    "hishel",
-    {% endif %}
-    {% if cookiecutter.add_pandas %}
-    "pandas",
-    "pyarrow",
-    {% endif %}
-    {% if cookiecutter.add_sqlalchemy %}
-    "add_sqlalchemy",
-    {% endif %}
-    {% if cookiecutter.add_pendulum %}
-    {% endif %}
+    {% if cookiecutter.add_dynaconf %}"dynaconf",{% endif %}
+    {% if cookiecutter.add_pydantic %}"pydantic",{% endif %}
+    {% if cookiecutter.add_http %}"httpx","hishel",{% endif %}
+    {% if cookiecutter.add_pandas %}"pandas",
+    "pyarrow",{% endif %}
+    {% if cookiecutter.add_sqlalchemy %}"sqlalchemy",{% endif %}
+    {% if cookiecutter.add_pendulum %}"pendulum"{% endif %}
 ]
 
 [tool.uv.sources]
