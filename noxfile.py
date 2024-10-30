@@ -1,9 +1,13 @@
-import logging
-from pathlib import Path
-import typing
-import platform
+from contextlib import contextmanager
 import importlib.util
+import logging
+import os
+from pathlib import Path
+import platform
 import shutil
+import socket
+import sys
+import typing as t
 
 log = logging.getLogger(__name__)
 
@@ -19,10 +23,80 @@ nox.options.error_on_external_run = False
 nox.options.error_on_missing_interpreters = False
 # nox.options.report = True
 
+## Define versions to test
+PY_VERSIONS: list[str] = ["3.12", "3.11"]
 ## Get tuple of Python ver ('maj', 'min', 'mic')
 PY_VER_TUPLE: tuple[str, str, str] = platform.python_version_tuple()
 ## Dynamically set Python version
 DEFAULT_PYTHON: str = f"{PY_VER_TUPLE[0]}.{PY_VER_TUPLE[1]}"
+
+# this VENV_DIR constant specifies the name of the dir that the `dev`
+# session will create, containing the virtualenv;
+# the `resolve()` makes it portable
+VENV_DIR = Path("./.venv").resolve()
+
+## At minimum, these paths will be checked by your linters
+#  Add new paths with nox_utils.append_lint_paths(extra_paths=["..."],)
+DEFAULT_LINT_PATHS: list[str] = [
+    "src",
+]
+## Set directory for requirements.txt file output
+REQUIREMENTS_OUTPUT_DIR: Path = Path("./")
+
+## Configure logging
+logging.basicConfig(
+    level="DEBUG",
+    format="%(name)s | [%(levelname)s] > %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+)
+
+## Add logger names to the list to 'silence' them, reducing log noise from 3rd party packages
+for _logger in []:
+    logging.getLogger(_logger).setLevel("WARNING")
+
+
+@contextmanager
+def cd(newdir):
+    """Context manager to change a directory before executing command."""
+    prevdir = os.getcwd()
+    os.chdir(os.path.expanduser(newdir))
+    try:
+        yield
+    finally:
+        os.chdir(prevdir)
+
+
+def check_path_exists(p: t.Union[str, Path] = None) -> bool:
+    """Check the existence of a path.
+
+    Params:
+        p (str | Path): The path to the directory/file to check.
+
+    Returns:
+        (True): If Path defined in `p` exists.
+        (False): If Path defined in `p` does not exist.
+
+    """
+    p: Path = Path(f"{p}")
+    if "~" in f"{p}":
+        p = p.expanduser()
+
+    _exists: bool = p.exists()
+
+    if not _exists:
+        log.error(FileNotFoundError(f"Could not find path '{p}'."))
+
+    return _exists
+
+
+def install_uv_project(session: nox.Session, external: bool = False) -> None:
+    """Method to install uv and the current project in a nox session."""
+    log.info("Installing uv in session")
+    session.install("uv")
+    log.info("Syncing uv project")
+    session.run("uv", "sync", external=external)
+    log.info("Installing project")
+    session.run("uv", "pip", "install", ".", external=external)
 
 
 @nox.session(name="cleanup-sandbox")
