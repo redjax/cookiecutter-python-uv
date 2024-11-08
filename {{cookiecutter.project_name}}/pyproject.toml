@@ -20,8 +20,23 @@ dependencies = [
     {% if cookiecutter.add_pendulum %}"pendulum>=3.0.0",{% endif %}
 ]
 
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [tool.uv.sources]
 {{ cookiecutter.project_name }} = { path = "./src/{{ cookiecutter.package_name }}" }
+
+## Fix 'error: Multiple top-level packages discovered in flat-layout'
+#  https://github.com/pypa/setuptools/issues/3197#issuecomment-1078770109
+[tool.setuptools]
+py-modules = []
+
+# [tool.hatch.build.targets.wheel]
+## The code is under src/cf_manager/<package_name>
+#  Tell the build system to look into src/cf_manager for
+#  the code to build
+# packages = []
 
 [tool.uv]
 
@@ -31,6 +46,20 @@ dev-dependencies = [
     "ruff>=0.6.8",
     "pytest-xdist>=3.6.1",
 ]
+
+[tool.pytest.ini_options]
+filterwarnings = ["error", "ignore::UserWarning"]
+testpaths = ["tests"]
+
+[tool.vulture]
+exclude = ["dist/", "release/"]
+# ignore_decorators = ["@app.route", "@require_*"]
+# ignore_names = ["visit_*", "do_*"]
+make_whitelist = true
+min_confidence = 80
+paths = ["noxfile.py", "sitecheck.py"]
+sort_by_size = true
+verbose = false
 
 [tool.ruff]
 target-version = "py311"
