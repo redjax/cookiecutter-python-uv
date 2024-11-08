@@ -1,4 +1,4 @@
-import os
+from __future__ import annotations
 
 def clean_dependencies_list():
     pyproject_path = "pyproject.toml"

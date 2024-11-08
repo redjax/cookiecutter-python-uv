@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from contextlib import contextmanager
 import importlib.util
 import logging
@@ -171,3 +173,51 @@ def create_new_cookiecutter_project(session: nox.Session):
             log.error(f"Invalid choice: {answer_prompts}. Must by 'Y' or 'N'.")
 
             return
+
+@nox.session(python=[DEFAULT_PYTHON], name="ruff-lint", tags=["ruff", "clean", "lint"])
+def run_linter(session: nox.Session, lint_paths: list[str] = DEFAULT_LINT_PATHS):
+    """Nox session to run Ruff code linting."""
+    if not check_path_exists(p="ruff.toml"):
+        if not Path("pyproject.toml").exists():
+            log.warning(
+                """No ruff.toml file found. Make sure your pyproject.toml has a [tool.ruff] section!
+                    
+If your pyproject.toml does not have a [tool.ruff] section, ruff's defaults will be used.
+Double check imports in __init__.py files, ruff removes unused imports by default.
+"""
+            )
+
+    session.install("ruff")
+
+    log.info("Linting code")
+    for d in lint_paths:
+        if not Path(d).exists():
+            log.warning(f"Skipping lint path '{d}', could not find path")
+            pass
+        else:
+            lint_path: Path = Path(d)
+            log.info(f"Running ruff imports sort on '{d}'")
+            session.run(
+                "ruff",
+                "check",
+                lint_path,
+                "--select",
+                "I",
+                "--fix",
+            )
+
+            log.info(f"Running ruff checks on '{d}' with --fix")
+            session.run(
+                "ruff",
+                "check",
+                lint_path,
+                "--fix",
+            )
+
+    log.info("Linting noxfile.py")
+    session.run(
+        "ruff",
+        "check",
+        f"{Path('./noxfile.py')}",
+        "--fix",
+    )
